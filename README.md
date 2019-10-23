@@ -245,6 +245,10 @@ The `Main.java` should look like similar:
 ![](tutorial/images/08.se.config.main.png)
 
 To reflect the runtime config changes modify the `io.helidon.examples.conference.se.GreetService` class.
+import package
+```java
+import java.util.function.Supplier;
+```
 Open the class and add new member to store the value:
 ```java
 private final Supplier<String> greetingSupplier;
