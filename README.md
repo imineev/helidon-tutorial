@@ -1058,7 +1058,7 @@ WEB server is up in 6 ms! http://localhost:8080/greet
 ```
 In case of the native binary you have to see much better startup time. The output above shows 200X faster startup time which can be very useful for example at scaling or provide *Serverless* like service where the instance is not running continuously but only to fulfil the request.  
 
-Also ee can use the second approach. 
+Also we can use the second approach. 
 
 Start in the directory of the SE service:
 
