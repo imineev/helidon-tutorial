@@ -929,7 +929,7 @@ Save the changes and restart the SE application. Open http://localhost:8080/inde
 
 After the application test stop all your running Helidon applications. Shut down SE and MP services. 
 
-## 12. Security
+## Step 12. Security
 Recommended approach is to configure security in a configuration file.
 As security requires more complex configuration, using a yaml file
 is required (unless you prefer very cryptic files).
@@ -968,6 +968,7 @@ security:
           - login: "joe"
             password: "password"
 ```
+![](tutorial/images/28.security.conf.png)
 
 ### Helidon MP
 Once the above configuration is added to the `mp.yaml`, we can try if security works.
