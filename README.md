@@ -743,6 +743,8 @@ private void outbound(ServerRequest request, ServerResponse response) {
             });
 }
 ```
+![](tutorial/images/14a.se.outbound.png)
+
 Save the changes, restart the SE application and test the outbound call: http://localhost:8080/greet/outbound/ or using `curl`:
 ```bash
 curl http://localhost:8080/greet/outbound/
