@@ -556,8 +556,8 @@ For demo purposes just display the current timestamp in the health information. 
 The complete `HealthSupport` build part should look like this:
 ```java
 HealthSupport health = HealthSupport.builder()
-        .add(HealthChecks.healthChecks())   // Adds a convenient set of checks
-        .add(() -> HealthCheckResponse.named("custom")
+        .addLiveness(HealthChecks.healthChecks())   // Adds a convenient set of checks
+        .addLiveness(() -> HealthCheckResponse.named("custom") // a custom (liveness) health check
                 .up()
                 .withData("timestamp", System.currentTimeMillis())
                 .build())
@@ -929,7 +929,7 @@ Save the changes and restart the SE application. Open http://localhost:8080/inde
 
 After the application test stop all your running Helidon applications. Shut down SE and MP services. 
 
-## Step 12. Security
+### Step 12. Security
 Recommended approach is to configure security in a configuration file.
 As security requires more complex configuration, using a yaml file
 is required (unless you prefer very cryptic files).
@@ -970,7 +970,7 @@ security:
 ```
 ![](tutorial/images/28.security.conf.png)
 
-### Helidon MP
+#### Helidon MP
 Once the above configuration is added to the `mp.yaml`, we can try if security works.
 Let's modify our `GreetResource.outbound` method. 
 This method will be available to users in role `user` or `admin`
@@ -1101,7 +1101,7 @@ System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 ```
 ![](tutorial/images/28.security.headers.png)
 
-### Helidon SE
+#### Helidon SE
 
 Dependencies:
 ```xml
@@ -1141,7 +1141,7 @@ return Routing.builder()
     .build();
 ```
 
-## Step 13 Running on multiple ports (MP)
+### Step 13 Running on multiple ports (MP)
 
 Helidon WebServer has the concept of named ports that can have routings assigned to them. 
 In Helidon MP, we can run our main application on the default port (all JAX-RS resources) and assign some of the
