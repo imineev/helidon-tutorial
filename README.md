@@ -360,8 +360,13 @@ http://localhost:8081/metrics/application/io.helidon.examples.conference.mp.Gree
 
 These are history/summary and gauge type metrics.
 
-### In SE project we need more coding. Remember, no magic here : )
+#### In SE project we need more coding. Remember, no magic here : )
 
+Import packages:
+```java
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricRegistry;
+```
 Add metric support to `GreetService.java` in the constructor. Also create `defaultMessageCounter` member:
 ```java
 private final Counter defaultMessageCounter;
