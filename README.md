@@ -505,42 +505,42 @@ The result should have similar:
 {
    "checks" : [
       {
-         "state" : "UP",
-         "name" : "deadlock"
-      },
-      {
-         "data" : {
-            "freeBytes" : 206927556608,
-            "percentFree" : "41.39%",
-            "total" : "465.63 GB",
-            "free" : "192.72 GB",
-            "totalBytes" : 499963174912
-         },
-         "name" : "diskSpace",
+         "name" : "deadlock",
          "state" : "UP"
       },
       {
+         "name" : "diskSpace",
          "data" : {
-            "greeting" : "Hello Helidon"
+            "freeBytes" : 21563768832,
+            "totalBytes" : 34351345664,
+            "percentFree" : "62.77%",
+            "free" : "20.08 GB",
+            "total" : "31.99 GB"
          },
-         "state" : "DOWN",
-         "name" : "greeting"
+         "state" : "UP"
       },
       {
-         "state" : "UP",
+         "name" : "greeting",
+         "data" : {
+            "greeting" : "Hello Helidon MP"
+         },
+         "state" : "UP"
+      },
+      {
          "name" : "heapMemory",
          "data" : {
-            "totalBytes" : 330825728,
-            "free" : "290.28 MB",
-            "max" : "3.56 GB",
-            "percentFree" : "99.31%",
-            "total" : "315.50 MB",
-            "maxBytes" : 3817865216,
-            "freeBytes" : 304383072
-         }
+            "freeBytes" : 63842960,
+            "totalBytes" : 136314880,
+            "percentFree" : "91.48%",
+            "free" : "60.89 MB",
+            "max" : "811.00 MB",
+            "maxBytes" : 850395136,
+            "total" : "130.00 MB"
+         },
+         "state" : "UP"
       }
    ],
-   "outcome" : "DOWN"
+   "outcome" : "UP"
 }
 ```
 
