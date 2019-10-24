@@ -563,6 +563,11 @@ HealthSupport health = HealthSupport.builder()
                 .build())
         .build();
 ```
+Import package:
+
+```java
+import org.eclipse.microprofile.health.HealthCheckResponse;
+```
 ![](tutorial/images/13.se.custom.health.png)
 
 Save the changes. Stop the SE application (if necessary) and run again using `Main.java`.
