@@ -1014,15 +1014,45 @@ Content-Length: 0
 
 Now we can request the endpoint as any user in `user` or `admin` role.
 You can try the following commands to see the results:
-`curl -i -u jack:password http://localhost:8081/greet/outbound/Stuttgart`
-`curl -i -u jill:password http://localhost:8081/greet/outbound/Stuttgart`
-`curl -i -u joe:password http://localhost:8081/greet/outbound/Stuttgart`
-`curl -i -u john:password http://localhost:8081/greet/outbound/Stuttgart`
+
+```bash
+curl -i -u jack:password http://localhost:8081/greet/outbound/Moscow
+curl -i -u jill:password http://localhost:8081/greet/outbound/Moscow
+curl -i -u joe:password http://localhost:8081/greet/outbound/Moscow
+curl -i -u john:password http://localhost:8081/greet/outbound/Moscow
+```
 
 We should see that `jack` and `jill` get the response, `joe` is forbidden (unauthorized)
 and `john` is unauthorized (meaning unauthenticated).
-Also investigate the traces in Zipkin, as you should nicely see what happened. 
 
+```bash
+[demo@localhost helidon-quickstart-se]$ curl -i -u joe:password http://localhost:8081/greet/outbound/Moscow
+HTTP/1.1 403 Forbidden
+Date: Thu, 24 Oct 2019 14:23:27 GMT
+transfer-encoding: chunked
+connection: keep-alive
+[demo@localhost helidon-quickstart-se]$ curl -i -u jill:password http://localhost:8081/greet/outbound/Moscow
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Thu, 24 Oct 2019 14:23:38 GMT
+transfer-encoding: chunked
+connection: keep-alive
+{"message":"Hello Helidon SE Modified Moscow!"}
+[demo@localhost helidon-quickstart-se]$ curl -i -u jack:password http://localhost:8081/greet/outbound/Moscow
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Thu, 24 Oct 2019 14:23:58 GMT
+transfer-encoding: chunked
+connection: keep-alive
+{"message":"Hello Helidon SE Modified Moscow!"}
+```
+
+Also investigate the traces in Zipkin, as you should nicely see what happened. 
+Don't forget to start zipkin
+
+```bash
+docker start zipkin
+```
 
 Let's modify our method to use the username of the logged in user. We will
 remove the path parameter and instead use the current username.
@@ -1280,7 +1310,7 @@ The above command creates a docker image `helidon-quickstart-se-native`.
 To run it locally, shut down SE service and run:
 
 ```bash
-`docker run --rm -p 8080:8080 helidon-quickstart-se-native:latest`
+docker run --rm -p 8080:8080 helidon-quickstart-se-native:latest
 ```
 After test you should stop all docker containers
 
