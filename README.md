@@ -834,6 +834,16 @@ Shutdown the SE service.
 Try invoking the `/greet/outbound` endpoint: http://localhost:8081/greet/outbound/jack. You should get an internal server error.
 ![](tutorial/images/21.http.500.png)
 
+Or in the log file MP server
+
+''' bash
+ http://localhost:8081/greet
+2019.10.24 11:38:10 WARNING io.helidon.microprofile.server.ServerImpl.jersey Thread[helidon-1,5,main]: Internal server error
+javax.ws.rs.ProcessingException: java.net.ConnectException: Connection refused (Connection refused)
+	at org.glassfish.jersey.client.internal.HttpUrlConnector.apply(HttpUrlConnector.java:260)
+	at org.glassfish.jersey.client.ClientRuntime.invoke(ClientRuntime.java:254)
+'''
+
 Add annotation to the method `outbound` in `GreetResource.java` in the MP project:
 ```java
 @Fallback(fallbackMethod = "onFailureOutbound")
@@ -854,16 +864,6 @@ Shutdown the SE application.
 Try again the `/greet/outbound` endpoint: http://localhost:8081/greet/outbound/jack. Now you should see
  the **Failed** message instead of an internal server error.
  
-Or in the log file MP server
-
-''' bash
- http://localhost:8081/greet
-2019.10.24 11:38:10 WARNING io.helidon.microprofile.server.ServerImpl.jersey Thread[helidon-1,5,main]: Internal server error
-javax.ws.rs.ProcessingException: java.net.ConnectException: Connection refused (Connection refused)
-	at org.glassfish.jersey.client.internal.HttpUrlConnector.apply(HttpUrlConnector.java:260)
-	at org.glassfish.jersey.client.ClientRuntime.invoke(ClientRuntime.java:254)
-'''
-
 ![](tutorial/images/23.fault.tolerance.png)
 
 If you have time you can check the failure in the Zipkin: http://localhost:9411/zipkin/
