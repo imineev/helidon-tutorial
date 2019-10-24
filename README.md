@@ -623,7 +623,7 @@ At the beginning you can see the custom data including the current times in mill
 
 ### Step 8: Connect the services
 
-In this example MP application will call the SE application's service.
+In this example MP application will call the SE application's service.We will use a JAX-RS client to connect from our MP service to the SE service.
 
 Add `WebTarget` to the `GreetResource` of the MP application:
 ```java
