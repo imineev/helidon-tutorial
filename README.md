@@ -1011,11 +1011,11 @@ static WebServer startServer() throws IOException {
 ```
 Close the editor and set the environment variable in the terminal for the build:
 ```bash
-export GRAALVM_HOME=/usr/lib/jvm/graalvm
+export GRAALVM_HOME=/home/demo/graalvm-ce-19.2.1
 ```
 Build the native executable binary:
 ```bash
-cd /u01/content/helidon-quickstart-se
+cd /u01/workspace/helidon-quickstart-se
 mvn package -P native-image
 ```
 This build may take some time. After the successful build first run the Java application few times.
