@@ -929,6 +929,212 @@ Save the changes and restart the SE application. Open http://localhost:8080/inde
 
 After the application test stop all your running Helidon applications. Shut down SE and MP services. 
 
+## 12. Security
+Recommended approach is to configure security in a configuration file.
+As security requires more complex configuration, using a yaml file
+is required (unless you prefer very cryptic files).
+
+We will secure our services as follows:
+
+_MP Service_
+ - Authentication: HTTP Basic authentication (NEVER use this in production)
+ - Authorization: Role based access control
+ - Identity propagation: 
+    - HTTP Basic authentication (user)
+    - HTTP Signatures (service)
+  
+_SE Service_
+ - Authentication:
+    - HTTP Basic authentication (user)
+    - HTTP Signatures (service)
+ - Authorization: Role based access control
+ 
+The common configuration (exactly the same in SE and MP) uses the ABAC and Basic authentication providers:
+```yaml
+security:
+  providers:
+    # enable the "ABAC" security provider (also handles RBAC)
+    - abac:
+    # enabled the HTTP Basic authentication provider
+    - http-basic-auth:
+        realm: "helidon"
+        users:
+          - login: "jack"
+            password: "password"
+            roles: ["admin"]    
+          - login: "jill"
+            password: "password"
+            roles: ["user"]
+          - login: "joe"
+            password: "password"
+```
+
+### Helidon MP
+Once the above configuration is added to the `mp.yaml`, we can try if security works.
+Let's modify our `GreetResource.outbound` method. 
+This method will be available to users in role `user` or `admin`
+
+```java
+@GET
+@Path("/outbound/{name}")
+@Fallback(fallbackMethod = "outboundFailed")
+@RolesAllowed({"user", "admin"})
+public JsonObject outbound(@PathParam("name") String name) {
+```
+
+If the application is restarted and you invoke the endpoint
+`curl -i http://localhost:8081/greet/outbound/jack`
+You get the following response:
+```text
+HTTP/1.1 403 Forbidden
+Content-Length: 0
+```
+
+Authorization itself does not imply authentication. Simple way to
+enforce authentication is to annotate either class or method as `@Authenticated`:
+
+```java
+import io.helidon.security.annotations.Authenticated;
+//...
+
+@GET
+@Path("/outbound/{name}")
+@Fallback(fallbackMethod = "outboundFailed")
+@RolesAllowed({"user", "admin"})
+@Authenticated
+public JsonObject outbound(@PathParam("name") String name) {
+```
+
+Now when we restart and re-request the endpoint, we get:
+```text
+HTTP/1.1 401 Unauthorized
+Content-Length: 0
+...
+```
+
+Now we can request the endpoint as any user in `user` or `admin` role.
+You can try the following commands to see the results:
+`curl -i -u jack:password http://localhost:8081/greet/outbound/Stuttgart`
+`curl -i -u jill:password http://localhost:8081/greet/outbound/Stuttgart`
+`curl -i -u joe:password http://localhost:8081/greet/outbound/Stuttgart`
+`curl -i -u john:password http://localhost:8081/greet/outbound/Stuttgart`
+
+We should see that `jack` and `jill` get the response, `joe` is forbidden (unauthorized)
+and `john` is unauthorized (meaning unauthenticated).
+Also investigate the traces in Zipkin, as you should nicely see what happened. 
+
+
+Let's modify our method to use the username of the logged in user. We will
+remove the path parameter and instead use the current username.
+Note that you also need to update the `outboundFailed`
+fallback method, as the signature changes.
+Also we send the current security context, so security can be propagated.
+
+```java
+import io.helidon.security.SecurityContext;
+//...
+
+@GET
+@Path("/outbound")
+@Fallback(fallbackMethod = "outboundFailed")
+@RolesAllowed({"user", "admin"})
+@Authenticated
+public JsonObject outbound(@Context SecurityContext context) {
+    return target.path(context.userName())
+            .request()
+            .property(ClientSecurityFeature.PROPERTY_CONTEXT, context)
+            .accept(MediaType.APPLICATION_JSON_TYPE)
+            .get(JsonObject.class);
+}
+
+public JsonObject outboundFailed(SecurityContext context) {
+    return Json.createObjectBuilder()
+            .add("Failed", context.userName())
+            .build();
+}
+```
+You can try the following commands to see the results:
+`curl -i -u jack:password http://localhost:8081/greet/outbound`
+`curl -i -u jill:password http://localhost:8081/greet/outbound`
+`curl -i -u joe:password http://localhost:8081/greet/outbound`
+`curl -i -u john:password http://localhost:8081/greet/outbound`
+
+Before connecting to SE, we need to add the following code to our `Main` class of MP, to support security propagation:
+```java
+// as we use default HTTP connection for Jersey client, we should set this as we set the Authorization header
+// when propagating security
+System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
+```
+
+### Helidon SE
+
+Dependencies:
+```xml
+<dependency>
+    <groupId>io.helidon.security.integration</groupId>
+    <artifactId>helidon-security-integration-webserver</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.helidon.security.providers</groupId>
+    <artifactId>helidon-security-providers-abac</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.helidon.security.providers</groupId>
+    <artifactId>helidon-security-providers-http-auth</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.helidon.security.providers</groupId>
+    <artifactId>helidon-security-providers-http-sign</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.helidon.config</groupId>
+    <artifactId>helidon-config-object-mapping</artifactId>
+</dependency>
+```
+
+In SE, we need to explicitly add Security to configuration:
+*please refer to the source code of this module to enable security in SE*
+
+Then we can add security to WebServer routing in `Main` class, method `createRouting`:
+```java
+return Routing.builder()
+    .register(JsonSupport.create())
+    .register(WebSecurity.create(config.get("security")))
+    .register(health)                   // Health at "/health"
+    .register(metrics)                  // Metrics at "/metrics"
+    .register("/greet", greetService)
+    .build();
+```
+
+## Running on multiple ports (MP)
+
+Helidon WebServer has the concept of named ports that can have routings assigned to them. 
+In Helidon MP, we can run our main application on the default port (all JAX-RS resources) and assign some of the
+MP "management" endpoints to different ports.
+The following configuration (you can add this to `conf/mp.yaml`) will move metrics and health check endpoints to port
+    `9081` (this is commented out in the file in this project, so previous examples work nicely)
+     
+```yaml
+server:
+  port: 8081
+  host: "localhost"
+  sockets:
+    admin:
+      port: 9081
+      bind-address: "localhost"
+
+metrics:
+  routing: "admin"
+
+health:
+  routing: "admin"
+```
+
+After restarting the MP server, you can find metrics and health on the following endpoints:
+http://localhost:9081/health
+http://localhost:9081/metrics
+
+
 ### Step 12: Build Native Image
 
 [GraalVM](https://www.graalvm.org/) is an open source, high-performance, polyglot virtual machine developed by Oracle Labs. GraalVM offers multiple features, including the ability to compile Java code ahead-of-time into a native executable binary. The binary can run natively on the operating system, without a Java runtime!
