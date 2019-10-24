@@ -1058,12 +1058,21 @@ WEB server is up in 6 ms! http://localhost:8080/greet
 ```
 In case of the native binary you have to see much better startup time. The output above shows 200X faster startup time which can be very useful for example at scaling or provide *Serverless* like service where the instance is not running continuously but only to fulfil the request.  
 
-Also ee can use the second approach. Start in the directory of the SE service:
+Also ee can use the second approach. 
 
+Start in the directory of the SE service:
+
+```bash
 docker build -t helidon-quickstart-se-native -f Dockerfile.native . 
-The first build takes a bit longer, as it downloads necessary libraries from Maven central into the docker image. Further builds use the downloaded libraries.
+```
 
-The above command creates a docker image helidon-quickstart-se-native. To run it locally, shut down SE service and run: docker run --rm -p 8080:8080 helidon-quickstart-se-native:latest
+The first build takes a bit longer, as it downloads necessary libraries from
+Maven central into the docker image. Further builds use the downloaded libraries.
+
+The above command creates a docker image `helidon-quickstart-se-native`.
+To run it locally, shut down SE service and run:
+
+`docker run --rm -p 8080:8080 helidon-quickstart-se-native:latest`
 
 ### Step 13: Deploy to Kubernetes (OKE)
 
