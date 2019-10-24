@@ -1099,6 +1099,7 @@ Before connecting to SE, we need to add the following code to our `Main` class o
 // when propagating security
 System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 ```
+![](tutorial/images/28.security.headers.png)
 
 ### Helidon SE
 
@@ -1140,7 +1141,7 @@ return Routing.builder()
     .build();
 ```
 
-## Running on multiple ports (MP)
+## Step 13 Running on multiple ports (MP)
 
 Helidon WebServer has the concept of named ports that can have routings assigned to them. 
 In Helidon MP, we can run our main application on the default port (all JAX-RS resources) and assign some of the
@@ -1169,7 +1170,7 @@ http://localhost:9081/health
 http://localhost:9081/metrics
 
 
-### Step 12: Build Native Image
+### Step 14: Build Native Image
 
 [GraalVM](https://www.graalvm.org/) is an open source, high-performance, polyglot virtual machine developed by Oracle Labs. GraalVM offers multiple features, including the ability to compile Java code ahead-of-time into a native executable binary. The binary can run natively on the operating system, without a Java runtime!
 
@@ -1322,13 +1323,13 @@ After test you should stop all docker containers
 docker stop $(docker ps -a -q)
 ```
 
-### Step 13: Deploy to Kubernetes (OKE)
+### Step 15: Deploy to Kubernetes (OKE)
 
 This step is optional if you have OCI access and available OKE instance.
 
 You can also apply the step to any other Kubernetes environment.
 
-#### 13.1 Build the application Docker image
+#### 15.1 Build the application Docker image
 
 Use again the terminal to build the Helidon SE application Docker image. Make sure you are in the Helidon SE project folder:
 ```bash
@@ -1350,7 +1351,7 @@ You can check either using `curl http://localhost:8080/greet` command or opening
 
 Stop the running docker container in the terminal using `Ctrl+C`.
 
-#### 13.2 Get an Auth Token
+#### 15.2 Get an Auth Token
 
 In a browser, go to the url you've been given to log in to Oracle Cloud Infrastructure. Specify tenancy, username and password and sign in.
 ![](tutorial/images/30.oci-login-page.png)
@@ -1372,7 +1373,7 @@ In the Console, open the navigation menu. Under **Solutions, Platform and Edge**
 Note your registry name which is the tenancy's namespace. The tenancy namespace is an auto-generated random string of alphanumeric characters. For example on the screenshot above it is: *ansh81vru1zp*.
 You will need soon this.
 
-#### 13.3 Push the Docker image to the registry
+#### 15.3 Push the Docker image to the registry
 
 For the push you have to create a new image tag which reflects your repository.
 ```bash
@@ -1434,7 +1435,7 @@ In the browser window showing the Console with the Registry page displayed, clic
 Click the name of the `conference-se` repository that contains the image you just pushed. You see:
 The different images in the repository. In this case, there is only one image, with the tag `1.0`.
 
-#### 13.4 Deploy to OKE (Oracle **Kubernetes** Engine)
+#### 15.4 Deploy to OKE (Oracle **Kubernetes** Engine)
 
 In order to use your Kubernetes cluster you have to configure `kubectl` the client tool on your desktop. To do so follow the [Downloading a kubeconfig File to Enable Cluster Access](https://docs.cloud.oracle.com/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm) documentation or [this tutorial](https://github.com/nagypeter/weblogic-operator-tutorial/blob/master/tutorials/setup.oke.md#prepare-oci-cli-to-download-kubernetes-configuration-file).
 
