@@ -657,6 +657,98 @@ curl http://localhost:8081/greet/outbound/jack
 ```
 You have to see the SE application's message including the name appended to the outbound path as parameter.
 
+### SE HTTP Client
+We have a choice for Helidon SE of using the HTTP client in Java (available since version 11), or any reactive/asynchronous
+HTTP client.
+
+For our example we will use JAX-RS reactive client from Jersey.
+
+This adds a few dependencies to our project.
+Create a `dependencyManagement` node in your `pom.xml`:
+```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jersey</groupId>
+                <artifactId>jersey-bom</artifactId>
+                <version>2.29.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+```
+And then update the `dependencies` node by adding the following dependencies to it:
+
+_These belong under `dependencies` *NOT* under `dependencyManagement/dependencies`_ 
+```xml
+<dependency>
+    <groupId>io.helidon.security.integration</groupId>
+    <artifactId>helidon-security-integration-jersey</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.helidon.tracing</groupId>
+    <artifactId>helidon-tracing-jersey-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.glassfish.jersey.core</groupId>
+    <artifactId>jersey-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.glassfish.jersey.inject</groupId>
+    <artifactId>jersey-hk2</artifactId>
+</dependency>
+```
+
+Add a `Client` and `WebTarget` to the `GreetService`:
+```java
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+//...
+private static final Client JAX_RS_CLIENT = ClientBuilder.newClient();
+
+private final WebTarget webTarget;
+```
+
+Update constructor to configure the `WebTarget`:
+
+```
+webTarget = JAX_RS_CLIENT.target("http://localhost:8081/greet");
+```
+
+Let's add a new routing method to our `GreetService` in `update(Rules)` method:
+```java
+rules
+    .get("/", this::getDefaultMessageHandler)
+    .get("/outbound", this::outbound)
+    .get("/{name}", this::getMessageHandler)
+    .put("/greeting", this::updateGreetingHandler);
+``` 
+
+And create the outbound method itself:
+```java
+private void outbound(ServerRequest request, ServerResponse response) {
+    // and reactive jersey client call
+    webTarget.request()
+            .rx()
+            .get(String.class)
+            .thenAccept(response::send)
+            .exceptionally(throwable -> {
+                // process exception
+                response.status(Http.Status.INTERNAL_SERVER_ERROR_500);
+                response.send("Failed with: " + throwable);
+                return null;
+            });
+}
+```
+Save the changes, restart the SE application and test the outbound call: http://localhost:8080/greet/outbound/ or using `curl`:
+```bash
+curl http://localhost:8080/greet/outbound/
+{"message":"Hello Helidon SE MODIFIED World!"}
+```
+
 ### Step 9: Tracing
 
 Helidon includes support for tracing through the OpenTracing APIs. Tracing is integrated with WebServer and Security.
