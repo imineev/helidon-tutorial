@@ -489,7 +489,7 @@ public class GreetHealthcheck implements HealthCheck {
 ```
 ![](tutorial/images/12.mp.custom.health.png)
 
-Save the changes. Stop the SE application if necessary and run again. First set your message:
+Save the changes. Stop the MP application if necessary and run again. First set your message:
 ```bash
 curl -i -X PUT -H "Content-Type: application/json" -d '{"greeting":"Hello Helidon"}' http://localhost:8081/greet/greeting
 HTTP/1.1 204 No Content
