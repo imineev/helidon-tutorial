@@ -481,7 +481,7 @@ public class GreetHealthcheck implements HealthCheck {
    public HealthCheckResponse call() {
        String message = provider.getMessage();
        return HealthCheckResponse.named("greeting")
-               .state("Hello".equals(message))
+               .state("Hello Helidon MP".equals(message))
                .withData("greeting", message)
                .build();
    }
