@@ -354,9 +354,13 @@ curl http://localhost:8081/metrics/application/greet.default.counter
 application:greet_default_counter 1
 ```
 
-Another metric types also available for Prometheus about the configured method. You can check at http://localhost:8081/metrics/application/io.helidon.examples.conference.mp.GreetResource.getDefaultMessage. These are history/summary and gauge type metrics.
+Another metric types also available for Prometheus about the configured method. You can check at:
 
-In SE project we need more coding. Remember, no magic here : )
+http://localhost:8081/metrics/application/io.helidon.examples.conference.mp.GreetResource.getDefaultMessage 
+
+These are history/summary and gauge type metrics.
+
+### In SE project we need more coding. Remember, no magic here : )
 
 Add metric support to `GreetService.java` in the constructor. Also create `defaultMessageCounter` member:
 ```java
