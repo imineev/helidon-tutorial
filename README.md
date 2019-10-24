@@ -1060,9 +1060,10 @@ In case of the native binary you have to see much better startup time. The outpu
 
 Also we can use the second approach. 
 
-Start in the directory of the SE service:
+Start in the directory of the SE service (helidon-quickstart-se)
 
 ```bash
+cd /u01/workspace/helidon-quickstart-se
 docker build -t helidon-quickstart-se-native -f Dockerfile.native . 
 ```
 
@@ -1072,7 +1073,14 @@ Maven central into the docker image. Further builds use the downloaded libraries
 The above command creates a docker image `helidon-quickstart-se-native`.
 To run it locally, shut down SE service and run:
 
+```bash
 `docker run --rm -p 8080:8080 helidon-quickstart-se-native:latest`
+```
+After test you should stop all docker containers
+
+```bash
+docker stop $(docker ps -a -q)
+```
 
 ### Step 13: Deploy to Kubernetes (OKE)
 
