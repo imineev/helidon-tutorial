@@ -1067,7 +1067,7 @@ import io.helidon.security.SecurityContext;
 
 @GET
 @Path("/outbound")
-@Fallback(fallbackMethod = "outboundFailed")
+@Fallback(fallbackMethod = "onFailureOutbound")
 @RolesAllowed({"user", "admin"})
 @Authenticated
 public JsonObject outbound(@Context SecurityContext context) {
@@ -1078,17 +1078,20 @@ public JsonObject outbound(@Context SecurityContext context) {
             .get(JsonObject.class);
 }
 
-public JsonObject outboundFailed(SecurityContext context) {
+public JsonObject onFailureOutbound(SecurityContext context) {
     return Json.createObjectBuilder()
             .add("Failed", context.userName())
             .build();
 }
 ```
 You can try the following commands to see the results:
-`curl -i -u jack:password http://localhost:8081/greet/outbound`
-`curl -i -u jill:password http://localhost:8081/greet/outbound`
-`curl -i -u joe:password http://localhost:8081/greet/outbound`
-`curl -i -u john:password http://localhost:8081/greet/outbound`
+
+```bash
+curl -i -u jack:password http://localhost:8081/greet/outbound
+curl -i -u jill:password http://localhost:8081/greet/outbound
+curl -i -u joe:password http://localhost:8081/greet/outbound
+curl -i -u john:password http://localhost:8081/greet/outbound
+```
 
 Before connecting to SE, we need to add the following code to our `Main` class of MP, to support security propagation:
 ```java
