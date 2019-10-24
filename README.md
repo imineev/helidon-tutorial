@@ -246,7 +246,7 @@ The `Main.java` should look like similar:
 
 To reflect the runtime config changes modify the `io.helidon.examples.conference.se.GreetService` class.
 
-import package
+Import package
 ```java
 import java.util.function.Supplier;
 ```
@@ -333,6 +333,12 @@ In case of MP it is basically just an annotation. Add the following annotation t
 ```java
 @Timed
 @Counted(name = "greet.default.counter", monotonic = true, absolute = true)
+```
+And import packages:
+
+```java
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 ```
 
 ![](tutorial/images/10.mp.metrics.greetresource.png)
