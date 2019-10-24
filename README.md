@@ -864,6 +864,18 @@ Shutdown the SE application.
 Try again the `/greet/outbound` endpoint: http://localhost:8081/greet/outbound/jack. Now you should see
  the **Failed** message instead of an internal server error.
  
+ This Fault Tolerance annotation is one of many, you can use:
+
+- `Fallback`
+- `CircuitBreaker`
+- `Bulkhead`
+- `Retry`
+- `Timeout`
+
+See the MP Fault Tolerance spec for details:
+https://github.com/eclipse/microprofile-fault-tolerance/releases/download/2.0/microprofile-fault-tolerance-spec-2.0.html
+
+ 
 ![](tutorial/images/23.fault.tolerance.png)
 
 If you have time you can check the failure in the Zipkin: http://localhost:9411/zipkin/
