@@ -326,7 +326,7 @@ curl -s -H 'Accept: application/json' -X GET http://localhost:8081/metrics/ | js
 3. A set of Helidon-specific metrics, available at `/metrics/vendor`
 Check the plain text result using browser: http://localhost:8081/metrics/vendor
 
-#### Add custom metrics
+#### Add custom metrics MP
 
 In case of MP it is basically just an annotation. Add the following annotation to the `getDefaultMessage` method in the  `io.helidon.examples.conference.mp.GreetResource` class.
 
