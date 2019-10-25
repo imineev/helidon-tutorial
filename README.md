@@ -366,6 +366,7 @@ Import packages:
 ```java
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.MetricRegistry;
+import io.helidon.metrics.RegistryFactory;
 ```
 Add metric support to `GreetService.java` in the constructor. Also create `defaultMessageCounter` member:
 ```java
