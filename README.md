@@ -332,7 +332,7 @@ In case of MP it is basically just an annotation. Add the following annotation t
 
 ```java
 @Timed
-@Counted(name = "greet.default.counter", monotonic = true, absolute = true)
+@Counted(name = "greet.default.counter", absolute = true)
 ```
 And import packages:
 
