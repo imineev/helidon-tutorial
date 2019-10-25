@@ -373,7 +373,7 @@ private final Counter defaultMessageCounter;
 
 GreetService(Config config) {
   greetingSupplier = config.get("app.greeting").asString().supplier("Ciao");
-  RegistryFactory metricsRegistry = RegistryFactory.getRegistryFactory().get();
+  RegistryFactory metricsRegistry = RegistryFactory.getInstance();
     MetricRegistry appRegistry = metricsRegistry.getRegistry(MetricRegistry.Type.APPLICATION);   
     this.defaultMessageCounter = appRegistry.counter("greet.default.counter");
 }
