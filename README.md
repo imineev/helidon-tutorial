@@ -459,33 +459,33 @@ The result should have similar:
 To add custom health check create a new class called `GreetHealthcheck` in `io.helidon.examples.conference.mp` package. To demonstrate health check you will use that message which can be stored using PUT method on the `/greet/greeting` path.
 (To create new class right click on the `io.helidon.examples.conference.mp` package under the *conference-mp* project in the left Project Explorer area and select **New->Class** menu item.) Copy the the content below into the new `GreetHealthcheck` class.
 ```java
-package io.helidon.examples.conference.mp;
-
+package io.helidon.examples.quickstart.mp;
+     
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
 
-@Health
+@Liveness
 @ApplicationScoped
 public class GreetHealthcheck implements HealthCheck {
-   private GreetingProvider provider;
+ private GreetingProvider provider;
 
-   @Inject
-   public GreetHealthcheck(GreetingProvider provider) {
-       this.provider = provider;
-   }
+ @Inject
+ public GreetHealthcheck(GreetingProvider provider) {
+     this.provider = provider;
+ }
 
-   @Override
-   public HealthCheckResponse call() {
-       String message = provider.getMessage();
-       return HealthCheckResponse.named("greeting")
-               .state("Hello Helidon MP".equals(message))
-               .withData("greeting", message)
-               .build();
-   }
+ @Override
+ public HealthCheckResponse call() {
+     String message = provider.getMessage();
+     return HealthCheckResponse.named("greeting")
+             .state("Hello".equals(message))
+             .withData("greeting", message)
+             .build();
+ }
 }
 ```
 ![](tutorial/images/12.mp.custom.health.png)
