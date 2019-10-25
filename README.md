@@ -549,6 +549,8 @@ The result should have similar:
 
 For demo purposes just display the current timestamp in the health information. Add the following configuration to `HealthSupport`:
 ```java
+import io.helidon.health.HealthSupport;
+
 .add(() -> HealthCheckResponse.named("custom")
         .up()
         .withData("timestamp", System.currentTimeMillis())
