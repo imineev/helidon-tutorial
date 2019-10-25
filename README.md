@@ -459,7 +459,7 @@ The result should have similar:
 To add custom health check create a new class called `GreetHealthcheck` in `io.helidon.examples.conference.mp` package. To demonstrate health check you will use that message which can be stored using PUT method on the `/greet/greeting` path.
 (To create new class right click on the `io.helidon.examples.conference.mp` package under the *conference-mp* project in the left Project Explorer area and select **New->Class** menu item.) Copy the the content below into the new `GreetHealthcheck` class.
 ```java
-package io.helidon.examples.quickstart.mp;
+package io.helidon.examples.conference.mp;
      
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
