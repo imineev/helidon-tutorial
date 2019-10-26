@@ -810,8 +810,7 @@ Register the tracer with the webserver in the `Main` class `startServer` method:
 ```java
 ServerConfiguration serverConfig =
                 ServerConfiguration.builder(config.get("server"))
-                        .tracer(TracerBuilder.create("helidon-se")
-                                        .buildAndRegister())
+			.tracer(TracerBuilder.create(config.get("helidon-se")).build())		
                         .build();
 ```
 ![](tutorial/images/18.se.tracing.main.png)
