@@ -1103,46 +1103,6 @@ System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 ```
 ![](tutorial/images/28.security.headers.png)
 
-#### Helidon SE
-
-Dependencies:
-```xml
-<dependency>
-    <groupId>io.helidon.security.integration</groupId>
-    <artifactId>helidon-security-integration-webserver</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.helidon.security.providers</groupId>
-    <artifactId>helidon-security-providers-abac</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.helidon.security.providers</groupId>
-    <artifactId>helidon-security-providers-http-auth</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.helidon.security.providers</groupId>
-    <artifactId>helidon-security-providers-http-sign</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.helidon.config</groupId>
-    <artifactId>helidon-config-object-mapping</artifactId>
-</dependency>
-```
-
-In SE, we need to explicitly add Security to configuration:
-*please refer to the source code of this module to enable security in SE*
-
-Then we can add security to WebServer routing in `Main` class, method `createRouting`:
-```java
-return Routing.builder()
-    .register(JsonSupport.create())
-    .register(WebSecurity.create(config.get("security")))
-    .register(health)                   // Health at "/health"
-    .register(metrics)                  // Metrics at "/metrics"
-    .register("/greet", greetService)
-    .register("/", StaticContentSupport.builder("/html"))
-    .build();
-```
 
 ### Step 13 Running on multiple ports (MP)
 
