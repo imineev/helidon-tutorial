@@ -1140,6 +1140,7 @@ return Routing.builder()
     .register(health)                   // Health at "/health"
     .register(metrics)                  // Metrics at "/metrics"
     .register("/greet", greetService)
+    .register("/", StaticContentSupport.builder("/html"))
     .build();
 ```
 
