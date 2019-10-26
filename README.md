@@ -808,9 +808,9 @@ To switch on the tracing in SE application add the following dependencies to you
 
 Register the tracer with the webserver in the `Main` class `startServer` method:
 ```java
-ServerConfiguration serverConfig =
+        ServerConfiguration serverConfig =
                 ServerConfiguration.builder(config.get("server"))
-			.tracer(TracerBuilder.create(config.get("helidon-se")).build())		
+			.tracer(TracerBuilder.create("helidon-se").build())		
                         .build();
 ```
 ![](tutorial/images/18.se.tracing.main.png)
