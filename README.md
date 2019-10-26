@@ -757,7 +757,7 @@ curl http://localhost:8080/greet/outbound/
 ### Step 9: Tracing
 
 Helidon includes support for tracing through the OpenTracing APIs. Tracing is integrated with WebServer and Security.
-Helidon has an integration with Zipkin tracer. To start the tracer you can use docker:
+Helidon supports "Zipkin" and "Jaeger" tracers. For our examples, we will use Zipkin server. To start the tracer you can use docker:
 ```bash
 docker run -d -p 9411:9411 openzipkin/zipkin
 ```
