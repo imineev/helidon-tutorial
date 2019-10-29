@@ -99,10 +99,13 @@ Select `/u01/workspace/conference-se` and click **Finish**.
 ![](tutorial/images/03.select.project.dir.se.png)
 
 Repeat the import steps for the MP project using the `/u01/workspace/conference-mp` folder. Now you have two projects imported in Eclipse.
+
 During the import some error in pom file
 ![](tutorial/images/01a.error.mp.png)
+
 You should just remove "make-index" execution step
 ![](tutorial/images/01.error.remove.mp.png)
+
 After, you can procced the labs
 ![](tutorial/images/04.imported.projects.png)
 
